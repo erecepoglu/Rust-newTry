@@ -1,6 +1,6 @@
 //use std::io;
-
-//use rand::Rng;
+use std::cmp::Ordering;
+//use rand::{Rng};
 
 fn main() {
     /* 
@@ -25,20 +25,27 @@ fn main() {
     println!("The immutable apples: {apples}");
     println!("The mutable apples: {mut_apples}");*/
 
-    println!("Guess the number!");
+    println!("Guess a number: ");
+    let mut _secret_number = rand::random_range(1..=100)
+                                                        .to_string();
 
-    let secret_number = rand::random_range(1..=100);
-
-    println!("The secret number is: {secret_number}");
-
-    println!("Please input your guess.");
-
+    let message = "Try again";
     let mut guess = String::new();
 
     std::io::stdin()
-        .read_line(&mut guess)
-        .expect("Failed to read line");
-
-    println!("You guessed: {guess}");
-
+        .read_line(&mut guess).expect(message);
+    
+    if guess == _secret_number.to_string() {
+        println!("You won!");
+    }else{
+        println!("Try later ");
+    }
+    
+    println!("Your guess is {} and secret number is {}"
+                ,guess.trim(), _secret_number);
+    match guess.cmp(&_secret_number){
+        Ordering::Equal => println!("You won"),
+        Ordering::Greater => println!("Too big!"),
+        Ordering::Less => println!("Too small!"),
+    }
 }
