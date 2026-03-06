@@ -26,26 +26,35 @@ fn main() {
     println!("The mutable apples: {mut_apples}");*/
 
     println!("Guess a number: ");
-    let mut _secret_number = rand::random_range(1..=100)
-                                                        .to_string();
+    let mut _secret_number = rand::random_range(1..=100);
+    loop{
+        let message = "Failed to read line";
+        let mut guess = String::new();
 
-    let message = "Try again";
-    let mut guess = String::new();
+        std::io::stdin()
+            .read_line(&mut guess).expect(message);
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+        if guess == _secret_number {
+            println!("You won!");
+        }else{
+            println!("Try later ");
+        }
+        
+        println!("Your guess is {} and secret number is {}"
+                    ,guess, _secret_number);
 
-    std::io::stdin()
-        .read_line(&mut guess).expect(message);
-    
-    if guess == _secret_number.to_string() {
-        println!("You won!");
-    }else{
-        println!("Try later ");
-    }
-    
-    println!("Your guess is {} and secret number is {}"
-                ,guess.trim(), _secret_number);
-    match guess.cmp(&_secret_number){
-        Ordering::Equal => println!("You won"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Less => println!("Too small!"),
+        
+            println!("Please input your guess.");
+            match guess.cmp(&_secret_number){
+                Ordering::Greater => println!("Too big!"),
+                Ordering::Less => println!("Too small!"),
+                Ordering::Equal =>{ 
+                    println!("You won");
+                    break;
+                }
+            }
     }
 }
